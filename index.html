@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Pierre Papier Ciseaux</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+        <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="game message is-info">
+            <h1 class="title message-header">Pierre Papier Ciseaux</h1>
+            
+        <div class="message-body">
+            <div class="announcement">
+                <h2>Le premier à 5 victoires !</h2>
+            </div>
+               
+            <div class="results">
+                <p>Choisissez pour commencer !</p>
+            </div>
+                
+            <div class="score">
+                <p class="yourScore"> Votre score est à 0 </p>
+                <p class="comScore"> Le score de l'ordinateur est à 0 </p>
+            </div>
+        </div>    
+        <div class="box has-text-centered">  
+            <div class="buttons ">
+                <button id="rock" class="button is-link">Pierre</button>
+                <button id="paper" class="button is-link">Papier</button>
+                <button id="scissors" class="button is-link">Ciseaux</button>
+            </div>
+        </div>
+        </div> 
+
+
+
+        
+        <script>
+        
+        const result = document.querySelector('.results');
+        const button = document.querySelectorAll('button');
+        const yourScore = document.querySelector('.yourScore');
+        const comScore = document.querySelector('.comScore');
+        const announcementText = document.querySelector('h2');
+        const announcement = document.querySelector('.announcement');
+        const playAgainBtn = document.createElement('button');
+
+        let playerScore = 0;
+        let computerScore = 0;
+        let playerSelection;
+        let computerSelection;
+    
+    button.forEach((button) => {
+        button.addEventListener('click', () => {
+        playerSelection = button.id;
+        computerSelection = computerPlay();
+        console.log(playerSelection); 
+
+        if (!isGameOver()) {
+            startRound();
+        }
+        }); 
+    });
+            
+    
+    function isGameOver() {
+        return playerScore === 5 || computerScore === 5
+    }
+                
+    function reset() {
+        playAgainBtn.innerHTML = 'Rejouer ?';
+        announcement.appendChild(playAgainBtn);
+
+        playAgainBtn.addEventListener('click', () => {
+            announcementText.textContent = 'Le premier à 5 victoires !';
+            result.textContent = 'Choisissez pour commencer !';
+            playerScore = 0;
+            computerScore = 0;
+            yourScore.textContent = 'Votre score est à 0';
+            comScore.textContent = 'Le score de l\'ordinateur est à 0';
+            announcement.removeChild(playAgainBtn);
+        })
+    }
+        
+            
+    function startRound() {
+        playRound();
+
+        if (isGameOver()) {
+            winner();
+        }
+    } 
+            
+    function winner() {
+        if (playerScore > computerScore) {
+            announcementText.textContent = 'Fin du jeu, vous gagnez !';
+            reset();
+        } else if (playerScore < computerScore) {
+            announcementText.textContent = 'Fin du jeu, vous perdez!';
+            reset();
+        }
+    }     
+
+    function computerPlay() {
+        let result = Math.floor(Math.random() * 3);
+        
+        if (result == 1) {
+            return 'rock'
+        } else if (result == 2) {
+            return 'paper'
+        } else {
+            return 'scissors';
+        }          
+    }
+        
+    function playRound() {
+        console.log(playerScore);
+        console.log(computerScore);
+
+        if (playerSelection === computerSelection) {
+            result.textContent = 'Egalité !';
+
+        } else if (computerSelection == 'rock' && playerSelection == 'scissors') {
+            computerScore++;
+            result.textContent = 'La pierre bat les ciseaux, vous perdez !';
+            comScore.textContent = 'Le score de l\'ordinateur est de ' + computerScore;
+
+        } else if (computerSelection == 'rock' && playerSelection == 'paper') {
+            playerScore++;
+            result.textContent = 'Le papier bat la pierre, vous gagnez !';
+            yourScore.textContent = 'Votre score est de ' + playerScore;
+
+        } else if (computerSelection == 'paper' && playerSelection == 'scissors') {
+            playerScore++;
+            result.textContent = 'Les ciseaux battent le papier, vous gagnez !';
+            yourScore.textContent = 'Votre score est de ' + playerScore;
+
+        } else if (computerSelection == 'paper' && playerSelection == 'rock') {
+            computerScore++;
+            result.textContent = 'Le papier bat la pierre, vous perdez !';
+            comScore.textContent = 'Le score de l\'ordinateur est de ' + computerScore;
+
+        } else if (computerSelection == 'scissors' && playerSelection == 'paper') {
+            computerScore++;
+            result.textContent = 'Les ciseaux battent le papier, vous perdez !';
+            comScore.textContent = 'Le score de l\'ordinateur est de ' + computerScore;
+
+        } else if (computerSelection == 'scissors' && playerSelection == 'rock') {
+            playerScore++;
+            result.textContent = 'La pierre bat les ciseaux, vous gagnez !'
+            yourScore.textContent = 'Votre score est de ' + playerScore;
+        } 
+    } 
+        
+        
+        
+        </script>
+    </body>
+</html>
